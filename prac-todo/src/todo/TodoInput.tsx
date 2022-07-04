@@ -17,9 +17,7 @@ export default function TodoInput({ changeInput }: any) {
     onSuccess: (res) => {
       queryClient.invalidateQueries("todos");
     },
-    onError: (err) => {
-      console.log(err);
-    },
+    onError: (err) => {},
   });
   const addText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
