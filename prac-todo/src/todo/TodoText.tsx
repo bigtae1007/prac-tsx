@@ -2,6 +2,7 @@ import { collection, getDoc, getDocs } from "firebase/firestore";
 import React from "react";
 import { useQuery } from "react-query";
 import { db } from "../firebase/firebase";
+import TodoChange from "./TodoChange";
 import TodoDelete from "./TodoDelete";
 
 interface Data {
@@ -31,6 +32,7 @@ export default function TodoText() {
             <>
               <p key={v.id}>{v.text}</p>
               <TodoDelete id={v.id} />
+              <TodoChange id={v.id} />
             </>
           );
         })}
