@@ -2,12 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { QueryClientProvider } from "react-query";
-
+import { Provider } from "react-redux";
+import { ReactQueryDevtools } from "react-query/devtools";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
+const queryClient = new QueryClient();
 ReactDOM.render(
-  <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
     <App />
-  </React.StrictMode>,
+    <ReactQueryDevtools initialIsOpen={true} />
+  </QueryClientProvider>,
   document.getElementById("root")
 );
 
