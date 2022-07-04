@@ -3,8 +3,8 @@ import React from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { db } from "../firebase/firebase";
 
-export default function TodoDelete({ id }) {
-  const fetcher = async (payload) => {
+export default function TodoDelete({ id }: { id: string }) {
+  const fetcher = async (payload: string) => {
     const docRef = doc(db, "todos", payload);
     await deleteDoc(docRef);
   };
