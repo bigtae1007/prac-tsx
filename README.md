@@ -4,3 +4,6 @@
 
 1. prac-todo
   typescript 맛보기, 간단한 CRUD
+  
+2. prac-memos
+  typescript 약간 심화 맛보기, 조금 더 복잡해진 CRUD
