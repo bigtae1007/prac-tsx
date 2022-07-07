@@ -1,6 +1,12 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 interface data {
   word: string;
@@ -38,5 +44,18 @@ export const useWord = {
       return wordsList;
     };
     return useQuery("words", fetech);
+  },
+  useDeleteWrod: () => {
+    const queryClient = useQueryClient();
+    const fetch = async (id: string) => {
+      const docRef = doc(db, "words", id);
+      await deleteDoc(docRef);
+    };
+    return useMutation(fetch, {
+      onSuccess: () => {
+        console.log("aa");
+        queryClient.invalidateQueries("words");
+      },
+    });
   },
 };
