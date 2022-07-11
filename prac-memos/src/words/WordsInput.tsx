@@ -1,4 +1,5 @@
 import React, { useState, Dispatch, SetStateAction, useRef } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { useWord } from "./useWordQuery";
 
@@ -7,28 +8,64 @@ interface dataType {
   mean?: string;
 }
 
+interface Data {
+  example?: string;
+  id?: string;
+  mean?: string;
+  word?: string;
+}
+
 export default function WordsInput({
   togle,
+  state,
+  changeData,
 }: {
   togle: Dispatch<SetStateAction<boolean>>;
+  state: boolean;
+  changeData: Data;
 }) {
-  const { mutate } = useWord.useSaveWord();
+  // 추가하기query
+  const { mutate: add } = useWord.useSaveWord();
+  // 수정하기 query
+  const { mutate: change } = useWord.useChangeWord();
+  // 데이터 상태관리
   const [data, setData] = useState<dataType | null>(null);
+  // textarea 상태관리
   const text = useRef<HTMLTextAreaElement>(null);
+  // onchange 이벤트
   const dataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({ ...data, [e.target.id]: e.target.value });
   };
+  // 수정하기라면 값 미리 집어넣기
+  useEffect(() => {
+    if (state) {
+      setData({
+        word: changeData.word,
+        mean: changeData.mean,
+      });
+    }
+  }, []);
   return (
     <BackGround>
       <Toggle>
         <WrapInput>
           <div>
             단어
-            <input type="text" id="word" onChange={dataChange} />
+            <input
+              type="text"
+              id="word"
+              value={data?.word}
+              onChange={dataChange}
+            />
           </div>
           <div>
             단어 뜻
-            <input type="text" id="mean" onChange={dataChange} />
+            <input
+              type="text"
+              id="mean"
+              value={data?.mean}
+              onChange={dataChange}
+            />
           </div>
           <div>
             예문
@@ -41,14 +78,30 @@ export default function WordsInput({
             if (
               data?.word !== undefined &&
               data?.mean !== undefined &&
-              text.current?.value !== undefined
-            )
-              mutate({
+              text.current?.value !== undefined &&
+              !state
+            ) {
+              add({
                 word: data.word,
                 mean: data.mean,
                 example: text.current?.value,
               });
-            togle(false);
+              togle(false);
+            } else if (
+              changeData.id !== undefined &&
+              data?.word !== undefined &&
+              data?.mean !== undefined &&
+              text.current?.value !== undefined &&
+              state
+            ) {
+              change({
+                id: changeData.id,
+                word: data.word,
+                mean: data.mean,
+                example: text.current?.value,
+              });
+              togle(false);
+            }
           }}
         >
           단어 저장

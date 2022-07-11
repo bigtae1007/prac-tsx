@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -45,6 +46,23 @@ export const useWord = {
     };
     return useQuery("words", fetech);
   },
+  useChangeWord: () => {
+    const queryClient = useQueryClient();
+    const fetch = async (payload: wordList) => {
+      const docRef = doc(db, "words", payload.id);
+      const response = await updateDoc(docRef, { ...payload });
+      return response;
+    };
+    return useMutation(fetch, {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        alert("수정 완료");
+      },
+      onError: () => {
+        alert("수정 실패 ");
+      },
+    });
+  },
   useDeleteWrod: () => {
     const queryClient = useQueryClient();
     const fetch = async (id: string) => {
@@ -53,7 +71,6 @@ export const useWord = {
     };
     return useMutation(fetch, {
       onSuccess: () => {
-        console.log("aa");
         queryClient.invalidateQueries("words");
       },
     });
