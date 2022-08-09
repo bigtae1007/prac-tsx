@@ -1,4 +1,4 @@
-## tpyeScript 연습 모음 폴더
+## typeScript 연습 모음 폴더
 
 
 ### 1. prac-todo
